@@ -1,0 +1,105 @@
+{
+  "theme": "light",
+  "archetype": "Archetype 4 (Swiss & High-Contrast) mixed with Archetype 1 (Organic & Earthy) for an Academic feel",
+  "brand_vibe": "Premium EdTech platform, serious but accessible, architectural layout with high-contrast functional colors. No AI-slop purple gradients.",
+  "colors": {
+    "primary": "#C92A2A",
+    "primary_hover": "#A52A2A",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#1E3A8A",
+    "background": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "surface_hover": "#F8FAFC",
+    "border": "#E2E8F0",
+    "text_primary": "#0F172A",
+    "text_secondary": "#475569",
+    "success": "#16A34A",
+    "warning": "#F59E0B",
+    "danger": "#DC2626"
+  },
+  "typography": {
+    "heading_font": "Cabinet Grotesk",
+    "body_font": "IBM Plex Sans",
+    "heading_strategy": "Use tight tracking (tracking-tight or tracking-tighter). Font weights should be bold or black for tension. Never center headings unless in hero sections.",
+    "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter leading-none font-bold text-slate-900",
+    "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-none font-bold text-slate-900",
+    "h3": "text-xl sm:text-2xl tracking-tight font-semibold text-slate-800",
+    "body": "text-base leading-relaxed text-slate-600",
+    "small": "text-sm text-slate-500 uppercase tracking-widest font-medium"
+  },
+  "spacing_and_layout": {
+    "container_padding": "px-4 sm:px-8 lg:px-12",
+    "section_gap": "py-16 sm:py-24",
+    "card_padding": "p-6 sm:p-8",
+    "grid_strategy": "Control Room Grid (Mode B): Dense spacing for dashboards (gap-6) but generous internal padding for cards. Pure CSS Grid for lists.",
+    "border_radius": "rounded-lg (8px max). Avoid pill shapes for main structural elements to maintain an architectural, serious look."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#C92A2A] text-white hover:bg-[#A52A2A] transition-colors rounded-md px-6 py-3 font-medium inline-flex items-center justify-center",
+      "secondary": "bg-[#1E3A8A] text-white hover:bg-[#1E3A8A]/90 transition-colors rounded-md px-6 py-3 font-medium inline-flex items-center justify-center",
+      "outline": "border border-slate-200 text-slate-900 hover:bg-slate-50 rounded-md px-6 py-3 font-medium inline-flex items-center justify-center"
+    },
+    "cards": {
+      "default": "bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200",
+      "course_card": "flex flex-col bg-white border border-slate-200 rounded-lg overflow-hidden group hover:border-slate-300 transition-all duration-200 hover:-translate-y-1",
+      "bento_item": "bg-white border border-slate-200 rounded-lg p-6 shadow-sm flex flex-col"
+    },
+    "sidebar": {
+      "container": "w-64 border-r border-slate-200 bg-white h-screen fixed flex flex-col",
+      "item": "flex items-center gap-3 px-4 py-2.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition-colors cursor-pointer",
+      "active_item": "flex items-center gap-3 px-4 py-2.5 rounded-md text-[#C92A2A] bg-red-50 font-medium cursor-pointer relative after:absolute after:left-0 after:top-1/2 after:-translate-y-1/2 after:h-1/2 after:w-1 after:bg-[#C92A2A] after:rounded-r-md"
+    },
+    "video_player": {
+      "container": "aspect-video bg-black rounded-lg overflow-hidden relative shadow-lg ring-1 ring-slate-200",
+      "layout": "grid grid-cols-1 lg:grid-cols-3 gap-8",
+      "player_section": "lg:col-span-2 space-y-4",
+      "playlist_section": "lg:col-span-1 bg-white border border-slate-200 rounded-lg p-4 h-[600px] overflow-y-auto"
+    },
+    "mcq_test": {
+      "question_container": "bg-white border border-slate-200 rounded-lg p-8 shadow-sm",
+      "option_button": "w-full text-left p-4 border border-slate-200 rounded-md hover:border-[#C92A2A] hover:bg-red-50 transition-colors text-slate-700 font-medium focus:ring-2 focus:ring-[#C92A2A] focus:ring-offset-2",
+      "option_selected": "w-full text-left p-4 border-2 border-[#C92A2A] bg-red-50 rounded-md text-[#C92A2A] font-medium"
+    }
+  },
+  "visual_enhancers": {
+    "shadows": "Minimalistic. Use shadow-sm for cards. Focus on 1px borders (border-slate-200) to separate surfaces.",
+    "glassmorphism": "Avoid in dashboards. Use flat solid colors to prevent visual refraction of data.",
+    "hover_effects": "Use subtle translate-y (transform transition-all duration-200 hover:-translate-y-1) on course cards and interactive widgets."
+  },
+  "media_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1622151834677-70f982c9adef?auto=format&fit=crop&q=85&w=2000",
+      "description": "Student studying on laptop (for login/welcome screen)"
+    },
+    "course_covers": [
+      {
+        "url": "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&q=85&w=800",
+        "description": "Blackboard with math/physics equations for Science subjects"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1708011271935-3e109df56fe0?auto=format&fit=crop&q=85&w=800",
+        "description": "Close up of numbers and formulas for Math subjects"
+      },
+      {
+        "url": "https://images.pexels.com/photos/12732215/pexels-photo-12732215.jpeg?auto=format&fit=crop&q=85&w=800",
+        "description": "Colorful 3D abstract geometric shapes for generic batches"
+      }
+    ],
+    "avatars": {
+      "student": "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?auto=format&fit=crop&q=80&w=200",
+      "admin": "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&q=80&w=200"
+    }
+  },
+  "iconography": "lucide-react",
+  "instructions_to_main_agent": [
+    "Load 'Cabinet Grotesk' for headings and 'IBM Plex Sans' for body text. You can use an import from Fontshare or Google Fonts in your main CSS/HTML.",
+    "Use standard React (.jsx) and standard Javascript (.js) only. Do not use Typescript (.tsx).",
+    "Use Lucide-react for all icons (e.g., BookOpen, PlayCircle, FileText, CheckCircle).",
+    "For Shadcn components, override the default border-radius classes to 'rounded-md' or 'rounded-lg' to match the 8px max radius guideline.",
+    "Ensure all interactive and key informational elements MUST include a 'data-testid' attribute (e.g., data-testid='login-submit-button').",
+    "Maintain strict separation between the sidebar navigation and main content area using standard Flex/Grid.",
+    "Do NOT use generic purple or teal gradients. Stick strictly to the defined color palette with Crimson Red (#C92A2A) as the primary brand color.",
+    "For the student dashboard 'Upcoming Live Classes', use a horizontal scroll or grid of cards with a prominent 'LIVE' red badge."
+  ]
+}

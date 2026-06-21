@@ -1,0 +1,9 @@
+{
+  "name": "GYAN RISE RANA E-LEARNING",
+  "short_name": "GYAN RISE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1E40AF",
+  "description": "Premium coaching LMS with live classes, notes, and push notifications."
+}

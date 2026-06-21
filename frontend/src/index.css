@@ -1,0 +1,164 @@
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* GYAN RISE RANA — Blue + Orange + White */
+    --grr-blue-50:  #EFF6FF;
+    --grr-blue-100: #DBEAFE;
+    --grr-blue-500: #2563EB;
+    --grr-blue-600: #1D4ED8;
+    --grr-blue-700: #1E40AF;
+    --grr-blue-900: #0B1E55;
+
+    --grr-orange-50:  #FFF7ED;
+    --grr-orange-100: #FFEDD5;
+    --grr-orange-500: #F97316;
+    --grr-orange-600: #EA580C;
+
+    --grr-bg: #F5F7FB;
+    --grr-surface: #FFFFFF;
+    --grr-border: #E5E9F2;
+    --grr-text: #0B1230;
+    --grr-text-soft: #475374;
+}
+
+html, body {
+    margin: 0;
+    background: var(--grr-bg);
+    color: var(--grr-text);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+}
+
+img, video, iframe {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+}
+
+/* Re-enable selection in inputs and content-editable */
+input, textarea, [contenteditable="true"], .allow-select {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: default !important;
+}
+
+.font-display {
+    font-family: 'Cabinet Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+@layer base {
+    :root {
+        --background: 220 33% 97%;
+        --foreground: 224 65% 11%;
+        --card: 0 0% 100%;
+        --card-foreground: 224 65% 11%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 224 65% 11%;
+        --primary: 222 78% 42%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 24 95% 53%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 220 30% 95%;
+        --muted-foreground: 220 14% 40%;
+        --accent: 220 100% 96%;
+        --accent-foreground: 222 78% 32%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 218 25% 90%;
+        --input: 218 25% 90%;
+        --ring: 222 78% 42%;
+        --chart-1: 222 78% 42%;
+        --chart-2: 24 95% 53%;
+        --chart-3: 142 71% 45%;
+        --chart-4: 280 65% 55%;
+        --chart-5: 0 84% 60%;
+        --radius: 0.75rem;
+    }
+}
+
+@layer base {
+    * { @apply border-border; }
+    body { @apply bg-background text-foreground; }
+}
+
+/* Hero gradient — Blue → Orange */
+.grr-hero-gradient {
+    background:
+      radial-gradient(1100px 500px at 0% 0%, rgba(37,99,235,0.18), transparent 60%),
+      radial-gradient(900px 500px at 100% 100%, rgba(249,115,22,0.22), transparent 60%),
+      linear-gradient(135deg, #0B1E55 0%, #1D4ED8 55%, #F97316 130%);
+}
+.grr-soft-gradient {
+    background: linear-gradient(135deg, #EFF6FF 0%, #FFF7ED 100%);
+}
+
+/* Subtle scrollbars */
+.thin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+
+@keyframes live-pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+.live-dot { animation: live-pulse 1.4s ease-in-out infinite; }
+
+.card-lift { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.card-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -16px rgba(30, 64, 175, 0.18);
+    border-color: #BFDBFE;
+}
+
+.side-active::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 18%; bottom: 18%;
+    width: 3px;
+    background: linear-gradient(180deg, #1D4ED8 0%, #F97316 100%);
+    border-radius: 0 3px 3px 0;
+}
+
+/* Floating watermark */
+@keyframes wm-float {
+    0%   { transform: translate(8%, 12%); }
+    25%  { transform: translate(72%, 8%); }
+    50%  { transform: translate(70%, 78%); }
+    75%  { transform: translate(10%, 80%); }
+    100% { transform: translate(8%, 12%); }
+}
+.video-watermark {
+    position: absolute;
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.55);
+    text-shadow: 0 0 6px rgba(0,0,0,0.55);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    will-change: transform;
+    animation: wm-float 22s linear infinite;
+}
+@media (min-width: 640px) {
+    .video-watermark { font-size: 14px; }
+}
+
+/* Block right-click & easy "save image" on protected media */
+.no-context { -webkit-touch-callout: none; }
+
+@layer base {
+    [data-debug-wrapper="true"] { display: contents !important; }
+}
