@@ -9,6 +9,7 @@ import { GraduationCap, ArrowRight, Sparkles, ShieldCheck, UserPlus, Mail, Check
 import { toast } from "sonner";
 import { api } from "@/lib/apiClient";
 import FounderCard from "@/components/FounderCard";
+import DeveloperFooter from "@/components/DeveloperFooter";
 
 export default function Login() {
   const { login } = useAuth();
@@ -176,6 +177,9 @@ export default function Login() {
 
           {/* Founder welcome */}
           <FounderCard variant="compact" className="mt-8" />
+
+          {/* Platform development credit */}
+          <DeveloperFooter />
         </div>
       </div>
 

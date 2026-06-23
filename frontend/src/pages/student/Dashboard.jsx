@@ -10,6 +10,7 @@ import { FileText, ClipboardList, PlayCircle, ArrowRight, Sparkles, Flame, Zap, 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import FounderCard from "@/components/FounderCard";
+import DeveloperFooter from "@/components/DeveloperFooter";
 
 function SectionHeader({ title, action, kicker }) {
   return (
@@ -241,6 +242,9 @@ export default function StudentDashboard() {
           </div>
         </div>
       </section>
+
+      {/* Platform development credit */}
+      <DeveloperFooter />
     </div>
   );
 }
