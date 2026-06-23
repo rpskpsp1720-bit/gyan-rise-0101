@@ -111,9 +111,9 @@ export default function BuyButton({ batch, onSuccess, className = "" }) {
                 </span>
               )}
               {!isFree && (
-                <span className="block text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md p-2 mt-3">
+                <span className="block text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-md p-2 mt-3">
                   <Lock className="inline h-3 w-3 mr-1" />
-                  Payment gateway integration is ready — currently in demo mode; clicking "Confirm" will unlock access instantly. Razorpay will replace this flow once keys are added.
+                  Secure payment via Razorpay. Clicking "Confirm & Pay" will open the Razorpay checkout.
                 </span>
               )}
             </DialogDescription>
