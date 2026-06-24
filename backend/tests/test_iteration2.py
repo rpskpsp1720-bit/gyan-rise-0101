@@ -8,7 +8,7 @@ import pytest
 import requests
 import websockets
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://lecture-hub-47.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001").rstrip("/")
 API = f"{BASE_URL}/api"
 WS_BASE = BASE_URL.replace("https://", "wss://").replace("http://", "ws://")
 
