@@ -89,3 +89,10 @@ credentials.json
 frontend/node_modules/.cache/default-development/0.pack
 frontend/node_modules/.cache/default-development/0.pack
 frontend/node_modules/.cache/default-development/0.pack
+
+# Android signing - NEVER commit keystores
+*.jks
+*.keystore
+keystore.properties
+gyanrise.jks*
+android/local.properties

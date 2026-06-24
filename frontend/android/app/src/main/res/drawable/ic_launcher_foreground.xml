@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  GYAN RISE app icon — adaptive icon vector (foreground).
+  Uses the brand gradient (deep navy → orange accent) with a stylized
+  "GR" monogram and a graduation-cap silhouette.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Graduation cap base -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30 L84,42 L54,54 L24,42 Z"/>
+    <!-- Tassel -->
+    <path
+        android:strokeColor="#F97316"
+        android:strokeWidth="2"
+        android:pathData="M78,45 L78,58 M75,58 L81,58"/>
+    <!-- Book / open page underneath cap -->
+    <path
+        android:fillColor="#FED7AA"
+        android:pathData="M30,60 Q54,52 78,60 L78,74 Q54,66 30,74 Z"/>
+    <!-- Monogram G -->
+    <path
+        android:fillColor="#F97316"
+        android:pathData="M48,78 a 8,8 0 1 1 8,-8 L52,70 L56,70 L56,76 L48,76 Z"/>
+</vector>
