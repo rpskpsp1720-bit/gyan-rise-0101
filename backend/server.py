@@ -1044,7 +1044,9 @@ async def preview_pdf(pdf_id: str, user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=500, detail="PDF file not available")
     # Fetch file from Google Drive (public/shared) via uc?export=download&id=
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
-    async with httpx.AsyncClient(timeout=60.0) as client:
+    # follow_redirects=True is required — Google Drive first responds with a 303/302
+    # redirect to the actual file host (drive.usercontent.google.com).
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
         r = await client.get(url)
     if r.status_code != 200:
         raise HTTPException(status_code=502, detail="Failed to fetch PDF from storage")
