@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Network security configuration — GYAN RISE Android shell.
+  Enforces HTTPS-only traffic, blocks all cleartext requests,
+  and only trusts system CAs.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

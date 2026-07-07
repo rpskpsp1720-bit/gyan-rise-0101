@@ -1,0 +1,36 @@
+{
+  "summary": "Fixed two issues in /app/backend/tests/test_change_password.py and reran pytest. All 10 tests pass (validation, happy path for admin+student, regression for forgot/reset/login/me/logout, production admin hash unchanged). Endpoint POST /api/auth/change-password verified end-to-end against the public preview URL.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "all (intermittent)", "issue": "First pytest run hit a few Cloudflare 502 Bad Gateway responses because the backend was reloading (uvicorn --reload watches the whole /app/backend tree, including the tests/ dir). Re-running passed cleanly. Consider scoping --reload-dir to /app/backend (excluding tests/) to avoid mid-test reloads."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_change_password.py",
+    "/app/test_reports/pytest/pytest_results_iter8.xml"
+  ],
+  "action_items": [
+    "Optional: pass --reload-dir /app/backend (excluding tests/) to uvicorn so test-file edits do not bounce the live backend mid-request."
+  ],
+  "critical_code_review_comments": [
+    "POST /api/auth/change-password implementation (server.py ~L489) is correct: validates current via bcrypt, rejects same-as-current with 400, enforces Pydantic min_length=6 (422), persists new bcrypt hash starting with $2b$, and authn-gated (401 without token).",
+    "Login lowercases email (server.py L400) — any test or client inserting users directly into Mongo MUST store email in lowercase. Documented this in the test (uses lowercase TEST_* emails).",
+    "verify_password swallows all exceptions and returns False — acceptable for login but consider logging at debug for diagnostics."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_change_password.py (fixed .local TLD to pytest-gyanrise.com on lines 50 and 200; added load_dotenv for frontend/.env so REACT_APP_BACKEND_URL resolves; lowercased TEST_* email prefix so it matches the login email.lower() lookup)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "not tested (skipped per request)"},
+  "test_credentials": "Admin: admin@gyanriserana.com / Admin@12345 (snapshot fixture verified password_hash unchanged before/after the suite).",
+  "seed_data_creation": "Each test creates and tears down its own TEST_ Mongo user (lowercase email @pytest-gyanrise.com). No persistent seed data added. Production admin untouched.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Test file /app/backend/tests/test_change_password.py is the canonical regression suite for change-password + auth basics. It loads both /app/backend/.env and /app/frontend/.env (for REACT_APP_BACKEND_URL). All temp emails are lowercase to match the server's email.lower() at login. If you see Cloudflare 502s, wait ~5s for backend to finish hot-reloading and rerun.",
+  "rca of the issue": "Iteration 7 used `@pytest.local` and `@nope.local` TLDs. Pydantic v2 EmailStr rejects RFC2606 reserved `.local` TLD with the email-validator backend, so /auth/forgot-password and any place that re-validates email refused with 422 before reaching the handler. Fixed by switching to `@pytest-gyanrise.com`. Also discovered (and fixed) a latent issue: the test inserted users with UPPER-case `TEST_` prefix, but /auth/login lowercases the email at lookup (server.py L400), so login always returned 401. Lowercased the prefix to `test_`. Final run: 10/10 PASS."
+}

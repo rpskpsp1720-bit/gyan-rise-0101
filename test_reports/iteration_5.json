@@ -1,0 +1,51 @@
+{
+  "summary": "Verified backend is now connected to Atlas production DB `gyan_rise_lms` (not local test_database). All 11 original users are present and intact with hashed passwords; the 2 seeded placeholder accounts (admin@gyanriserana.com, student@gyanriserana.com) coexist without modifying originals. Backend supervisor is RUNNING; /api ingress routing works via the public URL. 23/23 pytest tests pass (read-only, no writes to production DB).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_atlas_production_db.py",
+    "/app/test_reports/pytest/iter5_results.xml"
+  ],
+  "verified_features": [
+    "/app/backend/.env -> MONGO_URL points to gyan-rise.uayd6wc.mongodb.net (Atlas mongodb+srv); no localhost/127.0.0.1",
+    "/app/backend/.env -> DB_NAME = 'gyan_rise_lms' (not 'test_database')",
+    "MongoClient.ping() against Atlas succeeds; live DB is 'gyan_rise_lms'",
+    "Total users count in DB: 13 (11 original + 2 seeded placeholders)",
+    "All 11 original users present: admin@lms.com, student@lms.com, atlas_test_1782268394@example.com, chauhanshivam5794@gmail.com, clean_1782304761@x.com, skrajputchauhan01016353@gmail.com, akakch1122@gmail.com, shiwamchauhan84@gmail.com, test_0d26b711@example.com, test_e21bd4bd@example.com, test_7cedb90e@example.com",
+    "Each of the 11 original users still has a hashed_password field (not blanked/overwritten)",
+    "Seeded placeholder accounts present: admin@gyanriserana.com (admin), student@gyanriserana.com (student)",
+    "Production collections all present: users, batches, subjects, chapters, videos, notes, tests, live_classes, enrollments, payments, chat_messages (+ images, password_resets, progress, test_attempts)",
+    "Backend supervisor: RUNNING (pid stable, no KeyError on startup, 'LMS startup complete' in logs)",
+    "GET https://github-sync-125.preview.emergentagent.com/api/auth/me without token -> 401 (ingress -> port 8001 wiring intact after Atlas switch)",
+    "POST /api/auth/login admin@lms.com with deliberately invalid password -> 401 (endpoint healthy; user exists; NO brute force attempted)",
+    "POST /api/auth/login nonexistent@example.com -> 401 (correct error semantics)",
+    "POST /api/auth/login seeded admin (admin@gyanriserana.com / Admin@12345) -> 200 with JWT token (full auth stack functional against Atlas DB)"
+  ],
+  "action_items": [
+    "Inform the user that their previous student account is one of the 11 originals listed. They can log in with the SAME email + their original password. If they forgot it, use the password-reset flow rather than seeding/overwriting any record.",
+    "Optional (not blocking): Document in README that backend now connects to Atlas `gyan_rise_lms` cluster; protect MONGO_URL via secrets management before any push."
+  ],
+  "critical_code_review_comments": [
+    "MONGO_URL is checked into /app/backend/.env in plaintext with Atlas credentials. Acceptable for the preview env but must NOT be committed to a public GitHub repo - rotate the user `akprit1612_db_user` password and store in a secret manager before any push.",
+    "server.py uses os.environ['ADMIN_EMAIL'] (KeyError-throwing access) at startup - fail-fast is fine but consider logging which keys are missing.",
+    "Seed function auto-inserted placeholders admin@gyanriserana.com / student@gyanriserana.com into the PRODUCTION DB on first boot. That writes to prod even when the env intends only to read. Recommend gating seed_users() behind an env flag (e.g., SEED_USERS=true) so it cannot accidentally mutate prod again.",
+    "/app/backend/server.py is ~1947 lines - consider modularizing in a future iteration."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_atlas_production_db.py (new, read-only verification suite, 23 tests)"
+  ],
+  "success_rate": {"backend": "100% (23/23)", "frontend": "not tested (per request)"},
+  "test_credentials": "admin@gyanriserana.com / Admin@12345 ; student@gyanriserana.com / Student@12345 (seeded placeholders, work). The 11 original users' real passwords are unknown by design and were NOT brute-forced.",
+  "seed_data_creation": "No new seed data created by this test run. (Backend's own seed_users() previously inserted the 2 placeholder accounts; original 11 users untouched.)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend is connected to Atlas production DB gyan_rise_lms (Atlas host gyan-rise.uayd6wc.mongodb.net). 11 original users + 2 seeded placeholders = 13 users total. Use /app/backend/tests/test_atlas_production_db.py as the regression suite for production DB integrity. test_auth_deployment.py also still passes for seeded creds. IMPORTANT: All DB checks MUST remain READ-ONLY (no write/update/delete to prod). For pytest stability: the backend uses WatchFiles auto-reload, which may briefly stall HTTP requests right after a test file is created/modified - rerun the suite a second time after writes if you see ReadTimeouts.",
+  "rca of the issue": "ROOT CAUSE of user's original report ('previous student account cannot log in'): /app/backend/.env was pointing to local MongoDB (mongodb://localhost:27017, DB=test_database), which only contained the 2 freshly seeded placeholder accounts. The student's real account lives in the Atlas cluster gyan-rise.uayd6wc.mongodb.net DB `gyan_rise_lms`. FIX (already applied by main agent before this test): updated MONGO_URL + DB_NAME in /app/backend/.env to the Atlas URI, restarted backend supervisor. VERIFICATION (this iteration): all 11 original users are visible and intact in Atlas; auth endpoint correctly returns 401 for admin@lms.com with an invalid password (proves user record exists and the route works); the seeded placeholders coexist without overwriting originals. The user can now log in with their original email + their original password (use password-reset flow if forgotten; DO NOT seed/overwrite any of the 11 records)."
+}
