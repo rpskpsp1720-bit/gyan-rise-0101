@@ -2001,7 +2001,12 @@ async def on_startup():
     await db.batches.update_many({"price": {"$exists": False}}, {"$set": {"price": 0}})
     await db.batches.update_many({"currency": {"$exists": False}}, {"$set": {"currency": "INR"}})
     await seed_users()
-    await seed_content()
+    # seed_content() cascade-deletes any existing batches named "NEET 2027 - Lakshya",
+    # "JEE 2027 - Arjuna", "Class 10 Foundation" and their entire content tree on every
+    # startup. Guarded behind SEED_CONTENT=true so it never runs against production data
+    # unless explicitly opted in.
+    if os.environ.get("SEED_CONTENT", "false").lower() == "true":
+        await seed_content()
     logger.info("LMS startup complete")
 
 
