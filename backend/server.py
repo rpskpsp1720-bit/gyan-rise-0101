@@ -1854,8 +1854,9 @@ async def seed_users():
                 "created_at": now_iso(),
             }
         )
-    elif not verify_password(admin_pw, existing_admin["password_hash"]):
-        await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_pw)}})
+    # Note: If admin already exists, DO NOT reset password. Admin may have changed
+    # it via Settings > Change Password. Overwriting here would revert their change
+    # on every server restart. The env ADMIN_PASSWORD is only used for initial seeding.
 
     existing_student = await db.users.find_one({"email": student_email})
     if not existing_student:
@@ -1870,8 +1871,7 @@ async def seed_users():
                 "created_at": now_iso(),
             }
         )
-    elif not verify_password(student_pw, existing_student["password_hash"]):
-        await db.users.update_one({"email": student_email}, {"$set": {"password_hash": hash_password(student_pw)}})
+    # Note: Same rule for student — never overwrite an existing user's password on seed.
 
 
 async def seed_content():
