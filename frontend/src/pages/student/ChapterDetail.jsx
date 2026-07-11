@@ -96,7 +96,7 @@ export default function ChapterDetail() {
           ) : (
             <div className="grid sm:grid-cols-2 gap-4" data-testid="notes-list">
               {notes.map((n) => (
-                <a key={n.id} href={n.url} target="_blank" rel="noreferrer" className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors" data-testid={`note-card-${n.id}`}>
+                <Link key={n.id} to={`/notes/${n.id}/view`} className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors" data-testid={`note-card-${n.id}`}>
                   <div className="flex items-start gap-3">
                     <div className="h-10 w-10 rounded-md bg-blue-50 text-[#1E40AF] grid place-items-center"><FileText className="h-5 w-5" /></div>
                     <div className="flex-1 min-w-0">
@@ -105,7 +105,7 @@ export default function ChapterDetail() {
                       <div className="text-xs text-[#1E40AF] mt-2 inline-flex items-center gap-1 font-medium">Open PDF <ExternalLink className="h-3 w-3" /></div>
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           )}

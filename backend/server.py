@@ -895,6 +895,57 @@ async def delete_note(note_id: str, user: dict = Depends(require_admin)):
     return {"ok": True}
 
 
+@api.get("/notes/{note_id}/preview")
+async def preview_note_pdf(note_id: str, user: dict = Depends(get_current_user)):
+    """Stream a note's PDF inline so students can view it inside the LMS
+    without leaving the app (mirrors /digital-store/preview/{pdf_id}).
+
+    Access rules:
+      - Admin: always allowed
+      - Student: must have batch access (enrolled OR batch is free)
+
+    Supports both Google Drive share links and any direct PDF URL.
+    Drive file id is derived at request time from note.url so no data migration
+    is required for existing notes.
+    """
+    note = await db.notes.find_one({"id": note_id}, {"_id": 0})
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+
+    # Enforce batch access (chapter -> subject -> batch)
+    chapter = await db.chapters.find_one({"id": note.get("chapter_id")}, {"_id": 0})
+    if not chapter:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    subject = await db.subjects.find_one({"id": chapter.get("subject_id")}, {"_id": 0})
+    if not subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+    await ensure_batch_access(subject.get("batch_id"), user)
+
+    raw_url = (note.get("url") or "").strip()
+    if not raw_url:
+        raise HTTPException(status_code=500, detail="Note file not available")
+
+    # Prefer Google Drive file id extraction; fall back to fetching the URL directly
+    file_id = _extract_drive_file_id(raw_url) if "drive.google.com" in raw_url else None
+    fetch_url = f"https://drive.google.com/uc?export=download&id={file_id}" if file_id else raw_url
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        try:
+            r = await client.get(fetch_url)
+        except Exception as exc:
+            logger.warning(f"Failed to fetch note pdf: {exc}")
+            raise HTTPException(status_code=502, detail="Failed to fetch PDF from storage")
+    if r.status_code != 200:
+        raise HTTPException(status_code=502, detail="Failed to fetch PDF from storage")
+
+    headers = {
+        "Content-Type": "application/pdf",
+        "Cache-Control": "no-store",
+        "Content-Disposition": "inline",
+    }
+    return StarletteResponse(content=r.content, status_code=200, media_type="application/pdf", headers=headers)
+
+
 # ---------- Digital Store (PDFs) ----------
 class DigitalPdfIn(BaseModel):
     title: str

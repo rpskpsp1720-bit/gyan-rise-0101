@@ -13,6 +13,7 @@ import StudentBatches from "@/pages/student/Batches";
 import BatchDetail from "@/pages/student/BatchDetail";
 import SubjectDetail from "@/pages/student/SubjectDetail";
 import ChapterDetail from "@/pages/student/ChapterDetail";
+import NoteViewer from "@/pages/student/NoteViewer";
 import VideoPlayer from "@/pages/student/VideoPlayer";
 import LiveClasses from "@/pages/student/LiveClasses";
 import BlockedAccess from "@/pages/student/BlockedAccess";
@@ -177,6 +178,7 @@ function App() {
             <Route path="/batches/:batchId" element={<BatchDetail />} />
             <Route path="/subjects/:subjectId" element={<SubjectDetail />} />
             <Route path="/chapters/:chapterId" element={<ChapterDetail />} />
+            <Route path="/notes/:noteId/view" element={<NoteViewer />} />
             <Route path="/videos/:videoId" element={<VideoPlayer />} />
             <Route path="/live-classes" element={<LiveClasses />} />
             <Route path="/recent" element={<RecentlyViewed />} />
