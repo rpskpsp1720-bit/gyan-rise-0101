@@ -1857,6 +1857,69 @@ async def chat_history(live_class_id: str, user: dict = Depends(get_current_user
     return {"messages": msgs, "online": online}
 
 
+class ChatSendIn(BaseModel):
+    message: str
+
+
+@api.post("/chat/{live_class_id}/send")
+async def chat_send(live_class_id: str, body: ChatSendIn, user: dict = Depends(get_current_user)):
+    """HTTP fallback for sending chat messages. Used when the WebSocket connection
+    is unavailable (Render cold-starts, mobile networks, proxies that drop WS, etc).
+    Also broadcasts to any live WS clients so real-time viewers still get it.
+    """
+    lc = await db.live_classes.find_one({"id": live_class_id}, {"_id": 0})
+    if not lc:
+        raise HTTPException(status_code=404, detail="Live class not found")
+    text = (body.message or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Message cannot be empty")
+    if len(text) > 500:
+        raise HTTPException(status_code=400, detail="Message too long (max 500 chars)")
+    msg = {
+        "id": new_id(),
+        "live_class_id": live_class_id,
+        "user_id": user["id"],
+        "user_name": user["name"],
+        "user_role": user["role"],
+        "user_avatar": user.get("avatar_url"),
+        "message": text,
+        "pinned": False,
+        "created_at": now_iso(),
+    }
+    await db.chat_messages.insert_one(dict(msg))
+    msg.pop("_id", None)
+    # Fire-and-forget broadcast to any WS clients currently connected
+    try:
+        await manager.broadcast(live_class_id, {"type": "message", "message": msg})
+    except Exception as exc:
+        logger.warning(f"WS broadcast failed for chat send: {exc}")
+    return msg
+
+
+@api.post("/chat/{live_class_id}/messages/{message_id}/pin")
+async def chat_pin(live_class_id: str, message_id: str, user: dict = Depends(require_admin)):
+    doc = await db.chat_messages.find_one({"id": message_id, "live_class_id": live_class_id})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Message not found")
+    new_pinned = not doc.get("pinned", False)
+    await db.chat_messages.update_one({"id": message_id}, {"$set": {"pinned": new_pinned}})
+    try:
+        await manager.broadcast(live_class_id, {"type": "pin", "message_id": message_id, "pinned": new_pinned})
+    except Exception:
+        pass
+    return {"ok": True, "pinned": new_pinned}
+
+
+@api.delete("/chat/{live_class_id}/messages/{message_id}")
+async def chat_delete(live_class_id: str, message_id: str, user: dict = Depends(require_admin)):
+    await db.chat_messages.delete_one({"id": message_id, "live_class_id": live_class_id})
+    try:
+        await manager.broadcast(live_class_id, {"type": "delete", "message_id": message_id})
+    except Exception:
+        pass
+    return {"ok": True}
+
+
 @api.delete("/chat/messages/{message_id}")
 async def delete_chat_message(message_id: str, user: dict = Depends(require_admin)):
     await db.chat_messages.delete_one({"id": message_id})
