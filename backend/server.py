@@ -2002,15 +2002,6 @@ async def seed_content():
             "currency": "INR",
         },
         {
-            "name": "JEE 2027 - Arjuna",
-            "description": "Rigorous JEE Main + Advanced preparation. Physics, Chemistry, Mathematics.",
-            "cover_url": "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&q=85&w=1200",
-            "target_exam": "JEE",
-            "year": 2027,
-            "price": 5999,
-            "currency": "INR",
-        },
-        {
             "name": "Class 10 Foundation",
             "description": "Strong fundamentals in Science and Mathematics for CBSE Class 10.",
             "cover_url": "https://images.pexels.com/photos/12732215/pexels-photo-12732215.jpeg?auto=format&fit=crop&q=85&w=1200",
