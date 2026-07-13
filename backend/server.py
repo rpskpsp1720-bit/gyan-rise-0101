@@ -46,7 +46,7 @@ app = FastAPI(title="GYAN RISE RANA E-LEARNING API")
 api = APIRouter(prefix="/api")
 
 JWT_ALGORITHM = "HS256"
-DEFAULT_FRONTEND_URL = "https://gyan-rise-0101.vercel.app"
+DEFAULT_FRONTEND_URL = "https://gyanrise.in"
 
 
 def get_jwt_secret() -> str:
@@ -1857,12 +1857,12 @@ async def chat_history(live_class_id: str, user: dict = Depends(get_current_user
     return {"messages": msgs, "online": online}
 
 
-class ChatSendIn(BaseModel):
+class ChatSendBody(BaseModel):
     message: str
 
 
 @api.post("/chat/{live_class_id}/send")
-async def chat_send(live_class_id: str, body: ChatSendIn, user: dict = Depends(get_current_user)):
+async def chat_send(live_class_id: str, body: ChatSendBody, user: dict = Depends(get_current_user)):
     """HTTP fallback for sending chat messages. Used when the WebSocket connection
     is unavailable (Render cold-starts, mobile networks, proxies that drop WS, etc).
     Also broadcasts to any live WS clients so real-time viewers still get it.

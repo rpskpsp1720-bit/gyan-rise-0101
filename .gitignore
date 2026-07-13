@@ -83,6 +83,7 @@ android-sdk/
 .env
 .env.*
 *.env
+!backend/.env.example
 credentials.json
 *.key
 .credentials
@@ -98,3 +99,4 @@ gyanrise.jks*
 android/local.properties
 frontend/node_modules/.cache/default-development/1.pack
 frontend/node_modules/.cache/default-development/2.pack
+frontend/node_modules/.cache/default-development/6.pack
